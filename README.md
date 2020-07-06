@@ -20,6 +20,7 @@ This package is my attempt to convert all of that effort into a separate constru
 
 ### Example TypeScript usage
 
+stack.ts
 ```ts
 import { AppSyncTransformer } from 'aws-cdk-appsync-transformer';
 ...
@@ -28,6 +29,7 @@ new AppSyncTransformer(this, "my-cool-api", {
 });
 ```
 
+schema.graphql
 ```graphql
 type Customer 
     @model
@@ -83,9 +85,15 @@ Not Yet Supported:
 * [@predictions](https://docs.amplify.aws/cli/graphql-transformer/directives#predictions)
 * [@http](https://docs.amplify.aws/cli/graphql-transformer/directives#http)
 
+### Authentication
+
+Unauth Role: TODO
+
+Auth Role: Unsupported. Lambda function is required to setup its own role permissions?
+
 ### Code Generation
 
-I've written some helpers to generate code similarly to how AWS Amplify generates statements and types. You can find the code [here](https://github.com/kcwinner/advocacy/tree/master/cdk-amplify-appsync-helpers)
+I've written some helpers to generate code similarly to how AWS Amplify generates statements and types. You can find the code [here](https://github.com/kcwinner/advocacy/tree/master/cdk-amplify-appsync-helpers).
 
 ## Versioning
 
