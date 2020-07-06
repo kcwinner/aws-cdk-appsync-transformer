@@ -15,19 +15,35 @@ const apiKeyAuthorizationConfig: AuthorizationConfig = {
     }
 }
 
-test('GraphQL API Created', () => {
+test('GraphQL API W/ Defaults Created', () => {
     const mockApp = new App();
     const stack = new Stack(mockApp, 'testing-stack');
 
     new AppSyncTransformer(stack, 'test-transformer', {
         schemaPath: 'testSchema.graphql',
-        apiName: 'test-api',
         authorizationConfig: apiKeyAuthorizationConfig
     });
 
     expect(stack).toHaveResource('AWS::CloudFormation::Stack');
     expect(stack).toHaveResource('AWS::AppSync::GraphQLApi', {
-        AuthenticationType: 'API_KEY',
-        Name: 'test-api'
+        AuthenticationType: 'API_KEY'
     });
 });
+
+// test('GraphQL API W/ Sync Created', () => {
+//     const mockApp = new App();
+//     const stack = new Stack(mockApp, 'testing-stack');
+
+//     new AppSyncTransformer(stack, 'test-transformer', {
+//         schemaPath: 'testSchema.graphql',
+//         apiName: 'test-api',
+//         authorizationConfig: apiKeyAuthorizationConfig,
+//         syncEnabled: true
+//     });
+
+//     expect(stack).toHaveResource('AWS::CloudFormation::Stack');
+//     expect(stack).toHaveResource('AWS::AppSync::GraphQLApi', {
+//         AuthenticationType: 'API_KEY',
+//         Name: 'test-api'
+//     });
+// });

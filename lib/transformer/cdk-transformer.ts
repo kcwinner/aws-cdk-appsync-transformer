@@ -1,32 +1,21 @@
 import { Transformer, TransformerContext, getFieldArguments } from "graphql-transformer-core";
-import { normalize } from "path";
-import fs = require('fs');
 
 export class MyTransformer extends Transformer {
-    outputPath: string | undefined
     tables: any
     noneDataSources: any
 
-    constructor(outputPath?: string) {
+    constructor() {
         super(
             'MyTransformer',
             'directive @nullable on FIELD_DEFINITION'
         )
 
-        this.outputPath = outputPath ? normalize(outputPath) : undefined;
         this.tables = {}
         this.noneDataSources = {}
     }
 
     public after = (ctx: TransformerContext): void => {
-        if (!this.outputPath) {
-            this.printWithoutFilePath(ctx);
-        } else {
-            this.printWithFilePath(ctx);
-            this.tables.forEach((table: any) => {
-                this.writeTableToFile(table)
-            })
-        }
+        this.printWithoutFilePath(ctx);
 
         ctx.setOutput('CDK_TABLES', this.tables);
         ctx.setOutput('NONE', this.noneDataSources);
@@ -63,83 +52,68 @@ export class MyTransformer extends Transformer {
         }
     }
 
-    private printWithFilePath(ctx: TransformerContext): void {
-        if (!this.outputPath) return;
-        
-        if (!fs.existsSync(this.outputPath)) {
-            fs.mkdirSync(this.outputPath);
-        }
-
-        const tableFilePath = normalize(this.outputPath + '/tables')
-        if (fs.existsSync(tableFilePath)) {
-            const files = fs.readdirSync(tableFilePath)
-            files.forEach(file => fs.unlinkSync(tableFilePath + '/' + file))
-            fs.rmdirSync(tableFilePath)
-        }
-
-        const templateResources = ctx.template.Resources
-        if (!templateResources) return;
-
-        for (const resourceName of Object.keys(templateResources)) {
-            const resource = templateResources[resourceName]
-            if (resource.Type === 'AWS::DynamoDB::Table') {
-                this.buildTablesFromResource(resourceName, ctx)
-            }
-        }
-    }
-
     private buildTablesFromResource(resourceName: string, ctx: TransformerContext): void {
         const tableResource = ctx.template.Resources ? ctx.template.Resources[resourceName] : undefined
-
-        let partitionKey: any = {}
-        let sortKey: any = {}
 
         const attributeDefinitions = tableResource?.Properties?.AttributeDefinitions
         const keySchema = tableResource?.Properties?.KeySchema
 
-        if (keySchema.length == 1) {
-            partitionKey = {
-                name: attributeDefinitions[0].AttributeName,
-                type: attributeDefinitions[0].AttributeType
-            }
-        } else {
-            keySchema.forEach((key: any) => {
-                let keyType = key.KeyType
-                let attributeName = key.AttributeName
+        let keys = this.parseKeySchema(keySchema, attributeDefinitions);
 
-                let attribute = attributeDefinitions.find((attribute: any) => {
-                    return attribute.AttributeName === attributeName
-                })
+        let table = {
+            TableName: resourceName,
+            PartitionKey: keys.partitionKey,
+            SortKey: keys.sortKey,
+            TTL: tableResource?.Properties?.TimeToLiveSpecification,
+            GlobalSecondaryIndexes: [] as any[]
+        }
 
-                if (keyType === 'HASH') {
-                    partitionKey = {
-                        name: attribute.AttributeName,
-                        type: attribute.AttributeType
-                    }
-                } else if (keyType === 'RANGE') {
-                    sortKey = {
-                        name: attribute.AttributeName,
-                        type: attribute.AttributeType
-                    }
+        const gsis = tableResource?.Properties?.GlobalSecondaryIndexes;
+        if (gsis) {
+            gsis.forEach((gsi: any) => {
+                let gsiKeys = this.parseKeySchema(gsi.KeySchema, attributeDefinitions);
+                let gsiDefinition = {
+                    IndexName: gsi.IndexName,
+                    Projection: gsi.Projection,
+                    PartitionKey: gsiKeys.partitionKey,
+                    SortKey: gsiKeys.sortKey,
                 }
+
+                table.GlobalSecondaryIndexes.push(gsiDefinition);
             })
         }
 
-        this.tables[resourceName] = {
-            TableName: resourceName,
-            KeySchema: keySchema,
-            AttributeDefinitions: attributeDefinitions,
-            PartitionKey: partitionKey,
-            SortKey: sortKey
-        }
+        this.tables[resourceName] = table
     }
 
-    private writeTableToFile(table: any): void {
-        const tableFilePath = normalize(this.outputPath + '/tables')
-        if (!fs.existsSync(tableFilePath)) {
-            fs.mkdirSync(tableFilePath);
-        }
+    private parseKeySchema(keySchema: any, attributeDefinitions: any,) {
+        let partitionKey: any = {}
+        let sortKey: any = {}
 
-        fs.writeFileSync(`${tableFilePath}/${table.TableName}.json`, JSON.stringify(table))
+        keySchema.forEach((key: any) => {
+            let keyType = key.KeyType
+            let attributeName = key.AttributeName
+
+            let attribute = attributeDefinitions.find((attribute: any) => {
+                return attribute.AttributeName === attributeName
+            })
+
+            if (keyType === 'HASH') {
+                partitionKey = {
+                    name: attribute.AttributeName,
+                    type: attribute.AttributeType
+                }
+            } else if (keyType === 'RANGE') {
+                sortKey = {
+                    name: attribute.AttributeName,
+                    type: attribute.AttributeType
+                }
+            }
+        })
+
+        return {
+            partitionKey,
+            sortKey
+        }
     }
 }
