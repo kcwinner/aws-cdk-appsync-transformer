@@ -1,0 +1,9 @@
+type Thing @model {
+    id: ID!
+    description: String!
+}
+
+type OtherThing @model {
+    id: ID!
+    description: String!
+}

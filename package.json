@@ -1,6 +1,6 @@
 {
   "name": "appsync-transformer-construct",
-  "version": "1.0.0",
+  "version": "1.49.1",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -13,6 +13,10 @@
   },
   "jsii": {
     "outdir": "dist",
+    "versionFormat": "short",
+    "excludeTypescript": [
+      "test"
+    ],
     "targets": {
       "python": {
         "distName": "appsync-transformer-construct",
@@ -46,28 +50,37 @@
     "amplify",
     "transformer"
   ],
+  "license": "Apache-2.0",
   "author": {
     "name": "Ken Winner",
     "url": "https://github.com/kcwinner"
   },
-  "license": "MIT",
   "devDependencies": {
-    "@aws-cdk/assert": "^1.46.0",
+    "@aws-cdk/assert": "^1.49.1",
     "@types/jest": "^26.0.2",
     "@types/node": "^14.0.14",
-    "aws-cdk": "^1.46.0",
+    "aws-cdk": "^1.49.1",
     "jest": "^26.1.0",
     "jsii": "^1.7.0",
     "jsii-pacmak": "^1.7.0",
     "ts-jest": "^26.1.1"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-appsync": "^1.46.0",
-    "@aws-cdk/aws-cognito": "^1.46.0",
-    "@aws-cdk/aws-dynamodb": "^1.46.0",
-    "@aws-cdk/aws-iam": "^1.46.0",
-    "@aws-cdk/aws-lambda": "^1.46.0",
-    "@aws-cdk/core": "^1.46.0",
+    "@aws-cdk/aws-appsync": "^1.49.1",
+    "@aws-cdk/aws-cognito": "^1.49.1",
+    "@aws-cdk/aws-dynamodb": "^1.49.1",
+    "@aws-cdk/aws-iam": "^1.49.1",
+    "@aws-cdk/aws-lambda": "^1.49.1",
+    "@aws-cdk/core": "^1.49.1",
+    "constructs": "^3.0.3"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-appsync": "^1.49.1",
+    "@aws-cdk/aws-cognito": "^1.49.1",
+    "@aws-cdk/aws-dynamodb": "^1.49.1",
+    "@aws-cdk/aws-iam": "^1.49.1",
+    "@aws-cdk/aws-lambda": "^1.49.1",
+    "@aws-cdk/core": "^1.49.1",
     "@types/graphql": "^14.5.0",
     "cloudform-types": "^5.0.0",
     "graphql": "^14.6.0",
@@ -82,25 +95,19 @@
     "graphql-transformer-core": "^6.19.2",
     "graphql-versioned-transformer": "^4.15.10"
   },
-  "dependencies": {
-    "@aws-cdk/aws-appsync": "^1.46.0",
-    "@aws-cdk/aws-cognito": "^1.46.0",
-    "@aws-cdk/aws-dynamodb": "^1.46.0",
-    "@aws-cdk/aws-iam": "^1.46.0",
-    "@aws-cdk/aws-lambda": "^1.46.0",
-    "@aws-cdk/core": "^1.46.0",
-    "@types/graphql": "^14.5.0",
-    "cloudform-types": "^5.0.0",
-    "graphql": "^14.6.0",
-    "graphql-auth-transformer": "^6.18.2",
-    "graphql-connection-transformer": "^4.18.2",
-    "graphql-dynamodb-transformer": "^6.19.3",
-    "graphql-function-transformer": "^2.3.10",
-    "graphql-key-transformer": "^2.19.2",
-    "graphql-mapping-template": "^4.13.4",
-    "graphql-relational-schema-transformer": "^2.15.7",
-    "graphql-transformer-common": "^4.17.2",
-    "graphql-transformer-core": "^6.19.2",
-    "graphql-versioned-transformer": "^4.15.10"
-  }
+  "bundledDependencies": [
+    "@types/graphql",
+    "cloudform-types",
+    "graphql",
+    "graphql-auth-transformer",
+    "graphql-connection-transformer",
+    "graphql-dynamodb-transformer",
+    "graphql-function-transformer",
+    "graphql-key-transformer",
+    "graphql-mapping-template",
+    "graphql-relational-schema-transformer",
+    "graphql-transformer-common",
+    "graphql-transformer-core",
+    "graphql-versioned-transformer"
+  ]
 }

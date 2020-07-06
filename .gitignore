@@ -17,6 +17,3 @@ dist/
 
 # My transform directory
 appsync/*
-
-# Test Schema
-testSchema.graphql

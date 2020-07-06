@@ -1,15 +1,30 @@
 module.exports = {
-  "roots": [
-    "<rootDir>/tests"
+  roots: [
+    "<rootDir>/test"
   ],
   testMatch: ['**/*.test.ts'],
-  "transform": {
+  transform: {
     "^.+\\.tsx?$": "ts-jest"
   },
   collectCoverage: true,
   collectCoverageFrom: [
-    "**/*.js",
-    "**/*.ts",
-    "!**/node_modules/**"
-  ]
+    "lib/*.ts",
+    "!node_modules/**"
+  ],
+  moduleFileExtensions: [
+    "ts",
+    "tsx",
+    "js",
+    "jsx",
+    "json",
+    "node"
+  ],
+  globals: {
+    "ts-jest": {
+      "diagnostics": {
+        "warnOnly": true
+      }
+    },
+    "testEnvironment": "node"
+  }
 }
