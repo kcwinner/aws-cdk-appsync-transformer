@@ -1,5 +1,5 @@
 {
-  "name": "cdk-aws-appsync-transformer",
+  "name": "aws-cdk-appsync-transformer",
   "version": "1.49.1",
   "description": "AWS Amplify inspired CDK construct for creating @directive based AppSync APIs",
   "main": "lib/index.js",
@@ -27,19 +27,19 @@
     ],
     "targets": {
       "python": {
-        "distName": "appsync-transformer-construct",
-        "module": "acme.hello_jsii"
+        "distName": "aws-cdk-appsync-transformer",
+        "module": "aws_cdk_appsync_transformer"
       },
       "java": {
-        "package": "io.github.kcwinner.AppSyncTransformerConstruct",
+        "package": "io.github.kcwinner.AWSCDKAppSyncTransformer",
         "maven": {
           "groupId": "io.github.kcwinner",
-          "artifactId": "AppSyncTransformerConstruct"
+          "artifactId": "AWSCDKAppSyncTransformer"
         }
       },
       "dotnet": {
-        "namespace": "Acme.AppSyncTransformerConstruct",
-        "packageId": "Acme.AppSyncTransformerConstruct"
+        "namespace": "Kcwinner.AWSCDKAppSyncTransformer",
+        "packageId": "Kcwinner.AWSCDKAppSyncTransformer"
       }
     }
   },
