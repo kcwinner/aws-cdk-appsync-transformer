@@ -1,28 +1,106 @@
 {
   "name": "appsync-transformer-construct",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "test": "jest"
+    "build": "jsii",
+    "build:watch": "jsii -w",
+    "package": "jsii-pacmak",
+    "test": "jest",
+    "watch": "tsc -w"
   },
+  "jsii": {
+    "outdir": "dist",
+    "targets": {
+      "python": {
+        "distName": "appsync-transformer-construct",
+        "module": "acme.hello_jsii"
+      },
+      "java": {
+        "package": "io.github.kcwinner.AppSyncTransformerConstruct",
+        "maven": {
+          "groupId": "io.github.kcwinner",
+          "artifactId": "AppSyncTransformerConstruct"
+        }
+      },
+      "dotnet": {
+        "namespace": "Acme.AppSyncTransformerConstruct",
+        "packageId": "Acme.AppSyncTransformerConstruct"
+      }
+    }
+  },
+  "awscdkio": {
+    "twitter": "KenWin0x539"
+  },
+  "stability": "experimental",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kcwinner/appsync-transformer-construct.git"
+  },
+  "keywords": [
+    "aws",
+    "cdk",
+    "appsync",
+    "amplify",
+    "transformer"
+  ],
+  "author": {
+    "name": "Ken Winner",
+    "url": "https://github.com/kcwinner"
+  },
+  "license": "MIT",
   "devDependencies": {
-    "@aws-cdk/assert": "1.46.0",
-    "@types/jest": "^25.2.1",
-    "@types/node": "10.17.5",
-    "jest": "^25.5.0",
-    "ts-jest": "^25.3.1",
-    "typescript": "~3.7.2"
+    "@aws-cdk/assert": "^1.46.0",
+    "@types/jest": "^26.0.2",
+    "@types/node": "^14.0.14",
+    "aws-cdk": "^1.46.0",
+    "jest": "^26.1.0",
+    "jsii": "^1.7.0",
+    "jsii-pacmak": "^1.7.0",
+    "ts-jest": "^26.1.1"
   },
   "peerDependencies": {
-    "@aws-cdk/core": "1.46.0"
+    "@aws-cdk/aws-appsync": "^1.46.0",
+    "@aws-cdk/aws-cognito": "^1.46.0",
+    "@aws-cdk/aws-dynamodb": "^1.46.0",
+    "@aws-cdk/aws-iam": "^1.46.0",
+    "@aws-cdk/aws-lambda": "^1.46.0",
+    "@aws-cdk/core": "^1.46.0",
+    "@types/graphql": "^14.5.0",
+    "cloudform-types": "^5.0.0",
+    "graphql": "^14.6.0",
+    "graphql-auth-transformer": "^6.18.2",
+    "graphql-connection-transformer": "^4.18.2",
+    "graphql-dynamodb-transformer": "^6.19.3",
+    "graphql-function-transformer": "^2.3.10",
+    "graphql-key-transformer": "^2.19.2",
+    "graphql-mapping-template": "^4.13.4",
+    "graphql-relational-schema-transformer": "^2.15.7",
+    "graphql-transformer-common": "^4.17.2",
+    "graphql-transformer-core": "^6.19.2",
+    "graphql-versioned-transformer": "^4.15.10"
   },
   "dependencies": {
-    "@aws-cdk/aws-sns": "1.46.0",
-    "@aws-cdk/aws-sns-subscriptions": "1.46.0",
-    "@aws-cdk/aws-sqs": "1.46.0",
-    "@aws-cdk/core": "1.46.0"
+    "@aws-cdk/aws-appsync": "^1.46.0",
+    "@aws-cdk/aws-cognito": "^1.46.0",
+    "@aws-cdk/aws-dynamodb": "^1.46.0",
+    "@aws-cdk/aws-iam": "^1.46.0",
+    "@aws-cdk/aws-lambda": "^1.46.0",
+    "@aws-cdk/core": "^1.46.0",
+    "@types/graphql": "^14.5.0",
+    "cloudform-types": "^5.0.0",
+    "graphql": "^14.6.0",
+    "graphql-auth-transformer": "^6.18.2",
+    "graphql-connection-transformer": "^4.18.2",
+    "graphql-dynamodb-transformer": "^6.19.3",
+    "graphql-function-transformer": "^2.3.10",
+    "graphql-key-transformer": "^2.19.2",
+    "graphql-mapping-template": "^4.13.4",
+    "graphql-relational-schema-transformer": "^2.15.7",
+    "graphql-transformer-common": "^4.17.2",
+    "graphql-transformer-core": "^6.19.2",
+    "graphql-versioned-transformer": "^4.15.10"
   }
 }
