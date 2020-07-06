@@ -28,6 +28,44 @@ new AppSyncTransformer(this, "my-cool-api", {
 });
 ```
 
+```graphql
+type Customer 
+    @model
+    @auth(rules: [
+        { allow: groups, groups: ["Admins"] },
+        { allow: private, provider: iam, operations: [read, update] }
+    ]) {
+        id: ID!
+        firstName: String!
+        lastName: String!
+        active: Boolean!
+        address: String!
+}
+
+type Product
+    @model
+    @auth(rules: [
+        { allow: groups, groups: ["Admins"] },
+        { allow: public, provider: iam, operations: [read] }
+    ]) {
+        id: ID!
+        name: String!
+        description: String!
+        price: String!
+        active: Boolean!
+        added: AWSDateTime!
+        orders: [Order] @connection
+}
+
+type Order @model
+    @key(fields: ["id", "productID"]) {
+        id: ID!
+        productID: ID!
+        total: String!
+        ordered: AWSDateTime!
+}
+```
+
 ### [Supported Amplify Directives](https://docs.amplify.aws/cli/graphql-transformer/directives)
 
 Tested:
@@ -46,6 +84,8 @@ Not Yet Supported:
 * [@http](https://docs.amplify.aws/cli/graphql-transformer/directives#http)
 
 ### Code Generation
+
+I've written some helpers to generate code similarly to how AWS Amplify generates statements and types. You can find the code [here](https://github.com/kcwinner/advocacy/tree/master/cdk-amplify-appsync-helpers)
 
 ## Versioning
 
