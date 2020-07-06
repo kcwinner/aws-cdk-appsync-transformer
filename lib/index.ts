@@ -61,7 +61,7 @@ export class AppSyncTransformer extends Construct {
         })
     }
 
-    createNoneDataSourceAndResolvers(none: any, resolvers: any) {
+    private createNoneDataSourceAndResolvers(none: any, resolvers: any) {
         const noneDataSource = this.appsyncAPI.addNoneDataSource('NONE', 'None datasource for subscriptions and stuff');
 
         Object.keys(none).forEach((resolverKey: any) => {
@@ -78,7 +78,7 @@ export class AppSyncTransformer extends Construct {
         })
     }
 
-    createTablesAndResolvers(tableData: any, resolvers: any) {
+    private createTablesAndResolvers(tableData: any, resolvers: any) {
         const tableNameMap: any = {};
 
         Object.keys(tableData).forEach((tableKey: any) => {
@@ -129,7 +129,7 @@ export class AppSyncTransformer extends Construct {
         return tableNameMap;
     }
 
-    createTable(tableData: any) {
+    private createTable(tableData: any) {
         let tableProps: any = {
             billingMode: BillingMode.PAY_PER_REQUEST,
             partitionKey: {
@@ -167,7 +167,7 @@ export class AppSyncTransformer extends Construct {
         return table;
     }
 
-    convertAttributeType(type: any) {
+    private convertAttributeType(type: any) {
         if (type === 'S') {
             return AttributeType.STRING
         } else if (type === 'N') {
@@ -179,7 +179,7 @@ export class AppSyncTransformer extends Construct {
         return AttributeType.STRING
     }
 
-    convertProjectionType(type: string) {
+    private convertProjectionType(type: string) {
         switch (type) {
             case 'ALL':
                 return ProjectionType.ALL
@@ -192,7 +192,7 @@ export class AppSyncTransformer extends Construct {
         }
     }
 
-    getTableNameFromFieldName(fieldName: string) {
+    private getTableNameFromFieldName(fieldName: string) {
         let tableName = ''
         let plural = false
         let replace = ''

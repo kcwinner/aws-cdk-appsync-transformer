@@ -1,10 +1,4 @@
-import { 
-    Transformer, 
-    TransformerContext, 
-    getFieldArguments
-} from "graphql-transformer-core";
-
-import Resource from "cloudform-types/types/resource";
+import { Transformer, TransformerContext, getFieldArguments } from "graphql-transformer-core";
 import { normalize } from "path";
 import fs = require('fs');
 
@@ -16,7 +10,7 @@ export class MyTransformer extends Transformer {
     constructor(outputPath?: string) {
         super(
             'MyTransformer',
-            'directive @nullable on FIELD_DEFINITION' 
+            'directive @nullable on FIELD_DEFINITION'
         )
 
         this.outputPath = outputPath ? normalize(outputPath) : undefined;
@@ -51,11 +45,11 @@ export class MyTransformer extends Transformer {
     }
 
     private printWithoutFilePath(ctx: TransformerContext): void {
-        // @ts-ignore
-        const templateResources: { [key: string]: Resource } = ctx.template.Resources
+        const templateResources = ctx.template.Resources
+        if (!templateResources) return;
 
         for (const resourceName of Object.keys(templateResources)) {
-            const resource: Resource = templateResources[resourceName]
+            const resource = templateResources[resourceName]
             if (resource.Type === 'AWS::DynamoDB::Table') {
                 this.buildTablesFromResource(resourceName, ctx)
             } else if (resource.Type === 'AWS::AppSync::Resolver') {
@@ -83,11 +77,11 @@ export class MyTransformer extends Transformer {
             fs.rmdirSync(tableFilePath)
         }
 
-        // @ts-ignore
-        const templateResources: { [key: string]: Resource } = ctx.template.Resources
+        const templateResources = ctx.template.Resources
+        if (!templateResources) return;
 
         for (const resourceName of Object.keys(templateResources)) {
-            const resource: Resource = templateResources[resourceName]
+            const resource = templateResources[resourceName]
             if (resource.Type === 'AWS::DynamoDB::Table') {
                 this.buildTablesFromResource(resourceName, ctx)
             }
@@ -95,14 +89,13 @@ export class MyTransformer extends Transformer {
     }
 
     private buildTablesFromResource(resourceName: string, ctx: TransformerContext): void {
-        // @ts-ignore
-        const tableResource = ctx.template.Resources[resourceName]
+        const tableResource = ctx.template.Resources ? ctx.template.Resources[resourceName] : undefined
 
         let partitionKey: any = {}
         let sortKey: any = {}
 
-        const attributeDefinitions = tableResource.Properties?.AttributeDefinitions
-        const keySchema = tableResource.Properties?.KeySchema
+        const attributeDefinitions = tableResource?.Properties?.AttributeDefinitions
+        const keySchema = tableResource?.Properties?.KeySchema
 
         if (keySchema.length == 1) {
             partitionKey = {

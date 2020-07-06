@@ -1,7 +1,7 @@
 {
-  "name": "appsync-transformer-construct",
+  "name": "cdk-aws-appsync-transformer",
   "version": "1.49.1",
-  "description": "",
+  "description": "AWS Amplify inspired CDK construct for creating @directive based AppSync APIs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
