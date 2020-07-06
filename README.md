@@ -23,25 +23,29 @@ This package is my attempt to convert all of that effort into a separate constru
 ```ts
 import { AppSyncTransformer } from 'aws-cdk-appsync-transformer';
 ...
-new AppSyncTransformer(stack, "my-cool-api", {
+new AppSyncTransformer(this, "my-cool-api", {
     schemaPath: 'schema.graphql'
 });
 ```
 
-## Supported Directives
+### [Supported Amplify Directives](https://docs.amplify.aws/cli/graphql-transformer/directives)
 
 Tested:
-* @model
-* @auth
-* @connection
+* [@model](https://docs.amplify.aws/cli/graphql-transformer/directives#model)
+* [@auth](https://docs.amplify.aws/cli/graphql-transformer/directives#auth)
+* [@connection](https://docs.amplify.aws/cli/graphql-transformer/directives#connection)
 
 Experimental:
-* @function
-* @key
+* [@key](https://docs.amplify.aws/cli/graphql-transformer/directives#key)
+* [@versioned](https://docs.amplify.aws/cli/graphql-transformer/directives#versioned)
 
 Not Yet Supported:
-* @searchable
-... whatever is left
+* [@function](https://docs.amplify.aws/cli/graphql-transformer/directives#function)
+* [@searchable](https://docs.amplify.aws/cli/graphql-transformer/directives#searchable)
+* [@predictions](https://docs.amplify.aws/cli/graphql-transformer/directives#predictions)
+* [@http](https://docs.amplify.aws/cli/graphql-transformer/directives#http)
+
+### Code Generation
 
 ## Versioning
 

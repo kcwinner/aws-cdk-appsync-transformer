@@ -74,6 +74,7 @@
     "jest": "^26.1.0",
     "jsii": "^1.7.0",
     "jsii-pacmak": "^1.7.0",
+    "jsii-release": "^0.1.9",
     "ts-jest": "^26.1.1"
   },
   "peerDependencies": {

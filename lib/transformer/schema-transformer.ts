@@ -32,6 +32,7 @@ export class SchemaTransformer {
     isSyncEnabled: boolean
     authRolePolicy: Resource | undefined
     unauthRolePolicy: Resource | undefined
+    authTransformerConfig: ModelAuthTransformerConfig
 
     constructor(props: SchemaTransformerProps) {
         this.resolvers = {}
@@ -39,10 +40,9 @@ export class SchemaTransformer {
         this.schemaPath = props.schemaPath || './schema.graphql';
         this.outputPath = props.outputPath || './appsync';
         this.isSyncEnabled = props.syncEnabled || false
-    }
 
-    transform() {
-        const authTransformerConfig: ModelAuthTransformerConfig = {
+        // TODO: Make this mo betta
+        this.authTransformerConfig = {
             authConfig: {
                 defaultAuthentication: {
                     authenticationType: 'AMAZON_COGNITO_USER_POOLS',
@@ -64,8 +64,10 @@ export class SchemaTransformer {
                 ]
             }
         }
+    }
 
-        let transformConfig = this.isSyncEnabled ? this.loadConfigSync('lib/transformer/') : { }
+    transform() {
+        let transformConfig = this.isSyncEnabled ? this.loadConfigSync('lib/transformer/') : {}
 
         // Note: This is not exact as we are omitting the @searchable transformer.
         const transformer = new GraphQLTransform({
@@ -76,7 +78,7 @@ export class SchemaTransformer {
                 new FunctionTransformer(),
                 new KeyTransformer(),
                 new ModelConnectionTransformer(),
-                new ModelAuthTransformer(authTransformerConfig),
+                new ModelAuthTransformer(this.authTransformerConfig),
                 new MyTransformer(),
             ]
         })
