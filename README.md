@@ -31,8 +31,7 @@ new AppSyncTransformer(this, "my-cool-api", {
 
 schema.graphql
 ```graphql
-type Customer 
-    @model
+type Customer @model
     @auth(rules: [
         { allow: groups, groups: ["Admins"] },
         { allow: private, provider: iam, operations: [read, update] }
@@ -44,8 +43,7 @@ type Customer
         address: String!
 }
 
-type Product
-    @model
+type Product @model
     @auth(rules: [
         { allow: groups, groups: ["Admins"] },
         { allow: public, provider: iam, operations: [read] }
