@@ -100,9 +100,12 @@ new AppSyncTransformer(this, "my-cool-api", {
     schemaPath: 'schema.graphql',
     authorizationConfig: {
         defaultAuthorization: {
-            userPool: userPool,
-            appIdClientRegex: userPoolClient.userPoolClientId,
-            defaultAction: UserPoolDefaultAction.ALLOW
+            authorizationType: AuthorizationType.USER_POOL,
+            userPoolConfig: {
+                userPool: userPool,
+                appIdClientRegex: userPoolClient.userPoolClientId,
+                defaultAction: UserPoolDefaultAction.ALLOW
+            }
         }
     }
 });

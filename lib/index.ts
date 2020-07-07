@@ -83,7 +83,7 @@ export class AppSyncTransformer extends Construct {
         this.nestedAppsyncStack = new NestedStack(this, `appsync-nested-stack`);
 
         // AppSync
-        this.appsyncAPI = new GraphQLApi(this, `${id}-api`, {
+        this.appsyncAPI = new GraphQLApi(this.nestedAppsyncStack, `${id}-api`, {
             name: props.apiName ? props.apiName : `${id}-api`,
             authorizationConfig: props.authorizationConfig ? props.authorizationConfig : defaultAuthorizationConfig,
             logConfig: {
@@ -105,7 +105,7 @@ export class AppSyncTransformer extends Construct {
         this.createNoneDataSourceAndResolvers(outputs.NONE, resolvers);
 
         // Outputs so we can generate exports
-        new CfnOutput(this, 'appsyncGraphQLEndpointOutput', {
+        new CfnOutput(scope, 'appsyncGraphQLEndpointOutput', {
             value: this.appsyncAPI.graphQlUrl,
             description: 'Output for aws_appsync_graphqlEndpoint'
         })

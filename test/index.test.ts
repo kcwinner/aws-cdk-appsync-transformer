@@ -20,13 +20,13 @@ test('GraphQL API W/ Defaults Created', () => {
     const mockApp = new App();
     const stack = new Stack(mockApp, 'testing-stack');
 
-    new AppSyncTransformer(stack, 'test-transformer', {
+    const appSyncTransformer = new AppSyncTransformer(stack, 'test-transformer', {
         schemaPath: 'testSchema.graphql',
         authorizationConfig: apiKeyAuthorizationConfig
     });
 
     expect(stack).toHaveResource('AWS::CloudFormation::Stack');
-    expect(stack).toHaveResource('AWS::AppSync::GraphQLApi', {
+    expect(appSyncTransformer.nestedAppsyncStack).toHaveResource('AWS::AppSync::GraphQLApi', {
         AuthenticationType: 'API_KEY'
     });
 });
@@ -35,7 +35,7 @@ test('GraphQL API W/ Sync Created', () => {
     const mockApp = new App();
     const stack = new Stack(mockApp, 'testing-stack');
 
-    new AppSyncTransformer(stack, 'test-transformer', {
+    const appSyncTransformer = new AppSyncTransformer(stack, 'test-transformer', {
         schemaPath: 'testSchema.graphql',
         apiName: 'sync-api',
         authorizationConfig: apiKeyAuthorizationConfig,
@@ -43,7 +43,7 @@ test('GraphQL API W/ Sync Created', () => {
     });
 
     expect(stack).toHaveResource('AWS::CloudFormation::Stack');
-    expect(stack).toHaveResource('AWS::AppSync::GraphQLApi', {
+    expect(appSyncTransformer.nestedAppsyncStack).toHaveResource('AWS::AppSync::GraphQLApi', {
         AuthenticationType: 'API_KEY',
         Name: 'sync-api'
     });
@@ -58,7 +58,7 @@ test('GraphQL API W/ User Pool Auth Created', () => {
         userPool: userPool
     })
 
-    new AppSyncTransformer(stack, 'test-transformer', {
+    const appSyncTransformer = new AppSyncTransformer(stack, 'test-transformer', {
         schemaPath: 'testSchema.graphql',
         apiName: 'user-pool-auth-api',
         authorizationConfig: {
@@ -74,7 +74,7 @@ test('GraphQL API W/ User Pool Auth Created', () => {
     });
 
     expect(stack).toHaveResource('AWS::CloudFormation::Stack');
-    expect(stack).toHaveResource('AWS::AppSync::GraphQLApi', {
+    expect(appSyncTransformer.nestedAppsyncStack).toHaveResource('AWS::AppSync::GraphQLApi', {
         AuthenticationType: 'AMAZON_COGNITO_USER_POOLS',
         Name: 'user-pool-auth-api'
     });
