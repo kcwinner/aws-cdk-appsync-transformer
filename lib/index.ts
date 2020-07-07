@@ -6,11 +6,42 @@ import { Effect, PolicyStatement } from '@aws-cdk/aws-iam'
 
 import { SchemaTransformer } from './transformer/schema-transformer';
 
+/**
+ * Properties for AppSyncTransformer Construct
+ * @param schemaPath Relative path where schema.graphql exists.
+ * @param authorizationConfig {@link AuthorizationConfig} type defining authorization for AppSync GraphQLApi. Defaults to API_KEY
+ * @param apiName Optional string value representing the api name
+ * @param syncEnabled Optional boolean to enable DataStore Sync Tables
+ * @param fieldLogLevel {@link FieldLogLevel} type for AppSync GraphQLApi log level
+ */
 export interface AppSyncTransformerProps {
+    /**
+     * Required. Relative path where schema.graphql exists
+     */
     readonly schemaPath: string
+
+    /**
+     * Optional. {@link AuthorizationConfig} type defining authorization for AppSync GraphQLApi. Defaults to API_KEY
+     * @default API_KEY authorization config
+     */
     readonly authorizationConfig?: AuthorizationConfig
+
+    /**
+     * Optional. String value representing the api name
+     * @default `${id}-api`
+     */
     readonly apiName?: string
+
+    /**
+     * Optional. Boolean to enable DataStore Sync Tables
+     * @default false
+     */
     readonly syncEnabled?: boolean
+
+    /**
+     * Optional. {@link FieldLogLevel} type for AppSync GraphQLApi log level
+     * @default FieldLogLevel.NONE
+     */
     readonly fieldLogLevel?: FieldLogLevel
 }
 
@@ -25,6 +56,9 @@ const defaultAuthorizationConfig: AuthorizationConfig = {
     }
 }
 
+/**
+ * AppSyncTransformer Construct
+ */
 export class AppSyncTransformer extends Construct {
     public readonly appsyncAPI: GraphQLApi
     public readonly nestedAppsyncStack: NestedStack;
@@ -214,7 +248,7 @@ export class AppSyncTransformer extends Construct {
     }
 
     // https://docs.aws.amazon.com/appsync/latest/devguide/conflict-detection-and-sync.html
-    createSyncTable(tableData: any) {
+    private createSyncTable(tableData: any) {
         return new Table(this, 'appsync-api-sync-table', {
             billingMode: BillingMode.PAY_PER_REQUEST,
             partitionKey: {

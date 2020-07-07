@@ -117,7 +117,7 @@ Auth Role: Unsupported (for now?). Authorized roles (Lambda Functions, EC2 roles
 ### DataStore Support
 
 1. Pass `syncEnabled: true` to the `AppSyncTransformerProps`
-1. Generate necessary exports (see [Code Generation](#code_generation) below)
+1. Generate necessary exports (see [Code Generation](#code-generation) below)
 
 ### Code Generation
 
