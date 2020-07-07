@@ -1,6 +1,7 @@
 import { App, Stack } from '@aws-cdk/core';
 import '@aws-cdk/assert/jest';
-import { AuthorizationType, AuthorizationConfig } from '@aws-cdk/aws-appsync';
+import { AuthorizationType, AuthorizationConfig, UserPoolDefaultAction } from '@aws-cdk/aws-appsync';
+import { UserPool, UserPoolClient } from '@aws-cdk/aws-cognito';
 
 import { AppSyncTransformer } from '../lib/index';
 
@@ -36,7 +37,7 @@ test('GraphQL API W/ Sync Created', () => {
 
     new AppSyncTransformer(stack, 'test-transformer', {
         schemaPath: 'testSchema.graphql',
-        apiName: 'test-api',
+        apiName: 'sync-api',
         authorizationConfig: apiKeyAuthorizationConfig,
         syncEnabled: true
     });
@@ -44,6 +45,37 @@ test('GraphQL API W/ Sync Created', () => {
     expect(stack).toHaveResource('AWS::CloudFormation::Stack');
     expect(stack).toHaveResource('AWS::AppSync::GraphQLApi', {
         AuthenticationType: 'API_KEY',
-        Name: 'test-api'
+        Name: 'sync-api'
+    });
+});
+
+test('GraphQL API W/ User Pool Auth Created', () => {
+    const mockApp = new App();
+    const stack = new Stack(mockApp, 'user-pool-auth-stack');
+    
+    const userPool = new UserPool(stack, 'test-userpool');
+    const userPoolClient = new UserPoolClient(stack, 'test-userpool-client', {
+        userPool: userPool
+    })
+
+    new AppSyncTransformer(stack, 'test-transformer', {
+        schemaPath: 'testSchema.graphql',
+        apiName: 'user-pool-auth-api',
+        authorizationConfig: {
+            defaultAuthorization: {
+                authorizationType: AuthorizationType.USER_POOL,
+                userPoolConfig: {
+                    userPool: userPool,
+                    appIdClientRegex: userPoolClient.userPoolClientId,
+                    defaultAction: UserPoolDefaultAction.ALLOW
+                }
+            }
+        }
+    });
+
+    expect(stack).toHaveResource('AWS::CloudFormation::Stack');
+    expect(stack).toHaveResource('AWS::AppSync::GraphQLApi', {
+        AuthenticationType: 'AMAZON_COGNITO_USER_POOLS',
+        Name: 'user-pool-auth-api'
     });
 });

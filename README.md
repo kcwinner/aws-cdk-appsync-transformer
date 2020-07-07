@@ -18,9 +18,9 @@ This package is my attempt to convert all of that effort into a separate constru
 
 ## How Do I Use It
 
-### Example TypeScript Usage
+### Example Usage
 
-stack.ts
+API With Default Values
 ```ts
 import { AppSyncTransformer } from 'aws-cdk-appsync-transformer';
 ...
@@ -87,9 +87,39 @@ Not Yet Supported:
 
 ### Authentication
 
+User Pool Authentication
+```ts
+const userPool = new UserPool(this, 'my-cool-user-pool', {
+    ...
+})
+...
+const userPoolClient = new UserPoolClient(this, `${id}-client`, {
+    userPool: this.userPool,
+    ...
+})
+...
+new AppSyncTransformer(this, "my-cool-api", {
+    schemaPath: 'schema.graphql',
+    authorizationConfig: {
+        defaultAuthorization: {
+            userPool: userPool,
+            appIdClientRegex: userPoolClient.userPoolClientId,
+            defaultAction: UserPoolDefaultAction.ALLOW
+        }
+    }
+});
+```
+
+#### IAM 
+
 Unauth Role: TODO
 
 Auth Role: Unsupported (for now?). Authorized roles (Lambda Functions, EC2 roles, etc) are required to setup their own role permissions.
+
+### DataStore Support
+
+1. Pass `syncEnabled: true` to the `AppSyncTransformerProps`
+1. Generate necessary exports (see [Code Generation](#code_generation) below)
 
 ### Code Generation
 

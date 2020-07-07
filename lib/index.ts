@@ -11,6 +11,7 @@ export interface AppSyncTransformerProps {
     readonly authorizationConfig?: AuthorizationConfig
     readonly apiName?: string
     readonly syncEnabled?: boolean
+    readonly fieldLogLevel?: FieldLogLevel
 }
 
 const defaultAuthorizationConfig: AuthorizationConfig = {
@@ -52,7 +53,7 @@ export class AppSyncTransformer extends Construct {
             name: props.apiName ? props.apiName : `${id}-api`,
             authorizationConfig: props.authorizationConfig ? props.authorizationConfig : defaultAuthorizationConfig,
             logConfig: {
-                fieldLogLevel: FieldLogLevel.NONE,
+                fieldLogLevel: props.fieldLogLevel ? props.fieldLogLevel : FieldLogLevel.NONE,
             },
             schemaDefinitionFile: './appsync/schema.graphql'
         })
