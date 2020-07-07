@@ -18,7 +18,7 @@ This package is my attempt to convert all of that effort into a separate constru
 
 ## How Do I Use It
 
-### Example TypeScript usage
+### Example TypeScript Usage
 
 stack.ts
 ```ts
@@ -89,7 +89,7 @@ Not Yet Supported:
 
 Unauth Role: TODO
 
-Auth Role: Unsupported. Lambda function is required to setup its own role permissions?
+Auth Role: Unsupported (for now?). Authorized roles (Lambda Functions, EC2 roles, etc) are required to setup their own role permissions.
 
 ### Code Generation
 
@@ -101,5 +101,12 @@ I will *attempt* to align the major and minor version of this package with [AWS 
 
 I currently support [![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/kcwinner/appsync-transformer-construct/@aws-cdk/core)](https://github.com/aws/aws-cdk)
 
+## Contributing
+
+See [CONTRIBUTING](CONTRIBUTING.md) for details
+
+## License
+
+Distributed under [Apache License, Version 2.0](LICENSE)
 
 [aws cdk]: https://aws.amazon.com/cdk

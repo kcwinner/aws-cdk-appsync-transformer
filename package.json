@@ -8,6 +8,7 @@
     "build": "jsii",
     "build:watch": "jsii -w",
     "package": "jsii-pacmak",
+    "docgen": "jsii-docgen && mv API.md docs/",
     "cdk": "cdk",
     "check": "npm test && npm run lint",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
@@ -54,6 +55,7 @@
   "keywords": [
     "aws",
     "cdk",
+    "aws-cdk",
     "appsync",
     "amplify",
     "transformer"
@@ -73,6 +75,7 @@
     "eslint": "^7.4.0",
     "jest": "^26.1.0",
     "jsii": "^1.7.0",
+    "jsii-docgen": "^1.4.0",
     "jsii-pacmak": "^1.7.0",
     "jsii-release": "^0.1.9",
     "ts-jest": "^26.1.1"

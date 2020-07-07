@@ -2,10 +2,19 @@ src
 tsconfig.json
 tslint.json
 .prettierrc
-
+.eslintignore
+.eslintrc.js
 
 # Exclude jsii outdir
 dist
 
 # Include .jsii
 !.jsii
+
+# Docs and test stuff
+testSchema.graphql
+CONTRIBUTING.md
+.github/*
+appsync/*
+coverage/*
+codecov.yml
