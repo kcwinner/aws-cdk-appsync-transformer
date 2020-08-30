@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### 1.50.1-alpha (2020-07-07)
+### 1.50.0-rc.1 (2020-08-30)
+
+### Features
+
+* Adding in experimental support for function directives. See README for details.
+
+### 1.50.0-alpha (2020-07-07)
 
 ### Bugfixes
 
