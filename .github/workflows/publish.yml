@@ -33,9 +33,9 @@ jobs:
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
 
-      - run: make publish-nuget
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      # - run: make publish-nuget
+      #   env:
+      #     NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
       # - run: make publish-maven
       #   env:
