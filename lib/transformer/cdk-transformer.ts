@@ -3,6 +3,7 @@ import { Transformer, TransformerContext, getFieldArguments } from "graphql-tran
 export class MyTransformer extends Transformer {
     tables: any
     noneDataSources: any
+    functionResolvers: any[]
 
     constructor() {
         super(
@@ -12,6 +13,7 @@ export class MyTransformer extends Transformer {
 
         this.tables = {}
         this.noneDataSources = {}
+        this.functionResolvers = []
     }
 
     public after = (ctx: TransformerContext): void => {
@@ -19,6 +21,9 @@ export class MyTransformer extends Transformer {
 
         ctx.setOutput('CDK_TABLES', this.tables);
         ctx.setOutput('NONE', this.noneDataSources);
+
+        // @ts-ignore
+        ctx.setOutput('FUNCTION_RESOLVERS', this.functionResolvers);
 
         let query = ctx.getQuery();
         let queryFields = getFieldArguments(query);
@@ -47,6 +52,14 @@ export class MyTransformer extends Transformer {
                         typeName: resource.Properties.TypeName,
                         fieldName: resource.Properties.FieldName
                     }
+                } else if (resource.Properties?.Kind === 'PIPELINE') { // TODO: This may not be accurate but works for now
+                    let fieldName = resource.Properties?.FieldName
+                    let typeName = resource.Properties?.TypeName
+
+                    this.functionResolvers.push({
+                        typeName: typeName,
+                        fieldName: fieldName
+                    })
                 }
             }
         }

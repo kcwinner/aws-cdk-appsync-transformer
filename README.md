@@ -76,9 +76,10 @@ Tested:
 Experimental:
 * [@key](https://docs.amplify.aws/cli/graphql-transformer/directives#key)
 * [@versioned](https://docs.amplify.aws/cli/graphql-transformer/directives#versioned)
+* [@function](https://docs.amplify.aws/cli/graphql-transformer/directives#function)
+  * These work differently here than they do in Amplify - see [Functions](#functions) below
 
 Not Yet Supported:
-* [@function](https://docs.amplify.aws/cli/graphql-transformer/directives#function)
 * [@searchable](https://docs.amplify.aws/cli/graphql-transformer/directives#searchable)
 * [@predictions](https://docs.amplify.aws/cli/graphql-transformer/directives#predictions)
 * [@http](https://docs.amplify.aws/cli/graphql-transformer/directives#http)
@@ -117,6 +118,19 @@ Unauth Role: TODO
 
 Auth Role: Unsupported (for now?). Authorized roles (Lambda Functions, EC2 roles, etc) are required to setup their own role permissions.
 
+### Functions
+
+Fields with the `@function` direction will be accessible via `api.outputs.FUNCTION_RESOLVERS`. It will return an array like below.Currently these are not named and do not specify a region. There are improvements that can be made here but this simple way has worked for me so I've implemented it first. Typically I send all `@function` requests to one Lambda Function and have it route as necessary.
+
+```js
+[
+  { typeName: 'Query', fieldName: 'listUsers' },
+  { typeName: 'Query', fieldName: 'getUser' },
+  { typeName: 'Mutation', fieldName: 'createUser' },
+  { typeName: 'Mutation', fieldName: 'updateUser' }
+]
+```
+
 ### DataStore Support
 
 1. Pass `syncEnabled: true` to the `AppSyncTransformerProps`
@@ -131,6 +145,10 @@ I've written some helpers to generate code similarly to how AWS Amplify generate
 I will *attempt* to align the major and minor version of this package with [AWS CDK], but always check the release descriptions for compatibility.
 
 I currently support [![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/kcwinner/appsync-transformer-construct/@aws-cdk/core)](https://github.com/aws/aws-cdk)
+
+## Limitations
+
+* 
 
 ## Contributing
 

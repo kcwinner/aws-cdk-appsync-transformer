@@ -63,6 +63,9 @@ export class AppSyncTransformer extends Construct {
     public readonly appsyncAPI: GraphQLApi
     public readonly nestedAppsyncStack: NestedStack;
     public readonly tableNameMap: any;
+    public readonly outputs: any;
+    public readonly resolvers: any;
+
     private isSyncEnabled: boolean
     private syncTable: Table | undefined
 
@@ -79,6 +82,24 @@ export class AppSyncTransformer extends Construct {
         const transformer = new SchemaTransformer(transformerConfiguration);
         const outputs = transformer.transform();
         const resolvers = transformer.getResolvers();
+
+        this.outputs = outputs;
+
+        this.outputs.FUNCTION_RESOLVERS.forEach((resolver: any) => {
+            switch (resolver.typeName) {
+                case 'Query':
+                    delete resolvers[resolver.fieldName]
+                    break;
+                case 'Mutation':
+                    delete resolvers[resolver.fieldName]
+                    break;
+                case 'Subscription':
+                    delete resolvers[resolver.fieldName]
+                    break;
+            }
+        })
+        
+        this.resolvers = resolvers;
 
         this.nestedAppsyncStack = new NestedStack(this, `appsync-nested-stack`);
 
