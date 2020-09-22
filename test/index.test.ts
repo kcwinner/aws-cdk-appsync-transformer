@@ -11,7 +11,6 @@ const apiKeyAuthorizationConfig: AuthorizationConfig = {
         apiKeyConfig: {
             description: "Auto generated API Key from construct",
             name: "dev",
-            expires: "30"
         }
     }
 }
