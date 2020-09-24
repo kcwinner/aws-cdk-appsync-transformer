@@ -2,7 +2,6 @@ import { Construct, NestedStack, CfnOutput } from '@aws-cdk/core';
 import { GraphqlApi, AuthorizationType, FieldLogLevel, MappingTemplate, CfnDataSource, Resolver, AuthorizationConfig, Schema } from '@aws-cdk/aws-appsync';
 import { Table, AttributeType, ProjectionType, BillingMode } from '@aws-cdk/aws-dynamodb';
 import { Effect, PolicyStatement } from '@aws-cdk/aws-iam'
-// import { Function, Runtime, Code } from '@aws-cdk/aws-lambda';
 
 import { SchemaTransformer } from './transformer/schema-transformer';
 
