@@ -73,12 +73,12 @@
     "@typescript-eslint/parser": "^3.6.0",
     "aws-cdk": "^1.63.0",
     "eslint": "^7.4.0",
-    "jest": "^26.1.0",
+    "jest": "^26.4.2",
     "jsii": "^1.12.0",
     "jsii-docgen": "^1.4.27",
     "jsii-pacmak": "^1.12.0",
     "jsii-release": "^0.1.9",
-    "ts-jest": "^26.1.1"
+    "ts-jest": "^26.4.0"
   },
   "peerDependencies": {
     "@aws-cdk/aws-appsync": "^1.63.0",

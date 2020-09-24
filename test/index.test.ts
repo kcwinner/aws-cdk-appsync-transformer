@@ -24,6 +24,8 @@ test('GraphQL API W/ Defaults Created', () => {
         authorizationConfig: apiKeyAuthorizationConfig
     });
 
+    console.log(stack);
+
     expect(stack).toHaveResource('AWS::CloudFormation::Stack');
     expect(appSyncTransformer.nestedAppsyncStack).toHaveResource('AWS::AppSync::GraphQLApi', {
         AuthenticationType: 'API_KEY'
@@ -32,7 +34,7 @@ test('GraphQL API W/ Defaults Created', () => {
 
 test('GraphQL API W/ Sync Created', () => {
     const mockApp = new App();
-    const stack = new Stack(mockApp, 'testing-stack');
+    const stack = new Stack(mockApp, 'testing-sync-stack');
 
     const appSyncTransformer = new AppSyncTransformer(stack, 'test-transformer', {
         schemaPath: 'testSchema.graphql',
