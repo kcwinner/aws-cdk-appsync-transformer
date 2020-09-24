@@ -1,5 +1,5 @@
 import { Construct, NestedStack, CfnOutput } from '@aws-cdk/core';
-import { GraphQLApi, AuthorizationType, FieldLogLevel, MappingTemplate, CfnDataSource, Resolver, AuthorizationConfig } from '@aws-cdk/aws-appsync';
+import { GraphqlApi, AuthorizationType, FieldLogLevel, MappingTemplate, CfnDataSource, Resolver, AuthorizationConfig, Schema } from '@aws-cdk/aws-appsync';
 import { Table, AttributeType, ProjectionType, BillingMode } from '@aws-cdk/aws-dynamodb';
 import { Effect, PolicyStatement } from '@aws-cdk/aws-iam'
 // import { Function, Runtime, Code } from '@aws-cdk/aws-lambda';
@@ -9,10 +9,10 @@ import { SchemaTransformer } from './transformer/schema-transformer';
 /**
  * Properties for AppSyncTransformer Construct
  * @param schemaPath Relative path where schema.graphql exists.
- * @param authorizationConfig {@link AuthorizationConfig} type defining authorization for AppSync GraphQLApi. Defaults to API_KEY
+ * @param authorizationConfig {@link AuthorizationConfig} type defining authorization for AppSync GraphqlApi. Defaults to API_KEY
  * @param apiName Optional string value representing the api name
  * @param syncEnabled Optional boolean to enable DataStore Sync Tables
- * @param fieldLogLevel {@link FieldLogLevel} type for AppSync GraphQLApi log level
+ * @param fieldLogLevel {@link FieldLogLevel} type for AppSync GraphqlApi log level
  */
 export interface AppSyncTransformerProps {
     /**
@@ -21,7 +21,7 @@ export interface AppSyncTransformerProps {
     readonly schemaPath: string
 
     /**
-     * Optional. {@link AuthorizationConfig} type defining authorization for AppSync GraphQLApi. Defaults to API_KEY
+     * Optional. {@link AuthorizationConfig} type defining authorization for AppSync GraphqlApi. Defaults to API_KEY
      * @default API_KEY authorization config
      */
     readonly authorizationConfig?: AuthorizationConfig
@@ -39,7 +39,7 @@ export interface AppSyncTransformerProps {
     readonly syncEnabled?: boolean
 
     /**
-     * Optional. {@link FieldLogLevel} type for AppSync GraphQLApi log level
+     * Optional. {@link FieldLogLevel} type for AppSync GraphqlApi log level
      * @default FieldLogLevel.NONE
      */
     readonly fieldLogLevel?: FieldLogLevel
@@ -50,8 +50,7 @@ const defaultAuthorizationConfig: AuthorizationConfig = {
         authorizationType: AuthorizationType.API_KEY,
         apiKeyConfig: {
             description: "Auto generated API Key from construct",
-            name: "dev",
-            expires: "30"
+            name: "dev"
         }
     }
 }
@@ -60,7 +59,7 @@ const defaultAuthorizationConfig: AuthorizationConfig = {
  * AppSyncTransformer Construct
  */
 export class AppSyncTransformer extends Construct {
-    public readonly appsyncAPI: GraphQLApi
+    public readonly appsyncAPI: GraphqlApi
     public readonly nestedAppsyncStack: NestedStack;
     public readonly tableNameMap: any;
     public readonly outputs: any;
@@ -104,13 +103,13 @@ export class AppSyncTransformer extends Construct {
         this.nestedAppsyncStack = new NestedStack(this, `appsync-nested-stack`);
 
         // AppSync
-        this.appsyncAPI = new GraphQLApi(this.nestedAppsyncStack, `${id}-api`, {
+        this.appsyncAPI = new GraphqlApi(this.nestedAppsyncStack, `${id}-api`, {
             name: props.apiName ? props.apiName : `${id}-api`,
             authorizationConfig: props.authorizationConfig ? props.authorizationConfig : defaultAuthorizationConfig,
             logConfig: {
                 fieldLogLevel: props.fieldLogLevel ? props.fieldLogLevel : FieldLogLevel.NONE,
             },
-            schemaDefinitionFile: './appsync/schema.graphql'
+            schema: Schema.fromAsset('./appsync/schema.graphql')
         })
 
         let tableData = outputs.CDK_TABLES;
@@ -127,13 +126,13 @@ export class AppSyncTransformer extends Construct {
 
         // Outputs so we can generate exports
         new CfnOutput(scope, 'appsyncGraphQLEndpointOutput', {
-            value: this.appsyncAPI.graphQlUrl,
+            value: this.appsyncAPI.graphqlUrl,
             description: 'Output for aws_appsync_graphqlEndpoint'
         })
     }
 
     private createNoneDataSourceAndResolvers(none: any, resolvers: any) {
-        const noneDataSource = this.appsyncAPI.addNoneDataSource('NONE', 'None datasource for subscriptions and stuff');
+        const noneDataSource = this.appsyncAPI.addNoneDataSource('NONE');
 
         Object.keys(none).forEach((resolverKey: any) => {
             let resolver = resolvers[resolverKey];
@@ -154,7 +153,7 @@ export class AppSyncTransformer extends Construct {
 
         Object.keys(tableData).forEach((tableKey: any) => {
             const table = this.createTable(tableData[tableKey]);
-            const dataSource = this.appsyncAPI.addDynamoDbDataSource(tableKey, `Data source for ${tableKey}`, table);
+            const dataSource = this.appsyncAPI.addDynamoDbDataSource(tableKey, table);
 
             // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-deltasyncconfig.html
 
