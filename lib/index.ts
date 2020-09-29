@@ -96,7 +96,7 @@ export class AppSyncTransformer extends Construct {
                     break;
             }
         })
-        
+
         this.resolvers = resolvers;
 
         this.nestedAppsyncStack = new NestedStack(this, `appsync-nested-stack`);
@@ -182,47 +182,31 @@ export class AppSyncTransformer extends Construct {
             const dynamoDbConfig = dataSource.ds.dynamoDbConfig as CfnDataSource.DynamoDBConfigProperty;
             tableNameMap[tableKey] = dynamoDbConfig.tableName;
 
-            Object.keys(resolvers).forEach((resolverKey: any) => {
-                let resolverTableName = this.getTableNameFromFieldName(resolverKey)
-                if (tableKey === resolverTableName) {
-                    let resolver = resolvers[resolverKey];
-
-                    new Resolver(this.nestedAppsyncStack, `${resolver.typeName}-${resolver.fieldName}-resolver`, {
-                        api: this.appsyncAPI,
-                        typeName: resolver.typeName,
-                        fieldName: resolver.fieldName,
-                        dataSource: dataSource,
-                        requestMappingTemplate: MappingTemplate.fromFile(resolver.requestMappingTemplate),
-                        responseMappingTemplate: MappingTemplate.fromFile(resolver.responseMappingTemplate),
-                    })
-                }
-            })
-
-            let gsiResolvers = resolvers['gsi'];
-            if (gsiResolvers) {
-                Object.keys(gsiResolvers).forEach((resolverKey: any) => {
-                    let tableNameKey = gsiResolvers[resolverKey]['tableName'];
-
-                    // Trim plural?
-                    if (tableNameKey.slice(-1) === 's') {
-                        tableNameKey = tableNameKey.slice(0, -1);
-                    }
-
-                    let gsiTableName = this.getTableNameFromFieldName(tableNameKey)
-
-                    if (tableKey === gsiTableName) {
-                        let resolver = gsiResolvers[resolverKey]
-                        new Resolver(this.nestedAppsyncStack, `${resolver.typeName}-${resolver.fieldName}-resolver`, {
-                            api: this.appsyncAPI,
-                            typeName: resolver.typeName,
-                            fieldName: resolver.fieldName,
-                            dataSource: dataSource,
-                            requestMappingTemplate: MappingTemplate.fromFile(resolver.requestMappingTemplate),
-                            responseMappingTemplate: MappingTemplate.fromFile(resolver.responseMappingTemplate),
-                        })
-                    }
+            // Loop the basic resolvers
+            tableData[tableKey].Resolvers.forEach((resolverKey: any) => {
+                let resolver = resolvers[resolverKey];
+                new Resolver(this.nestedAppsyncStack, `${resolver.typeName}-${resolver.fieldName}-resolver`, {
+                    api: this.appsyncAPI,
+                    typeName: resolver.typeName,
+                    fieldName: resolver.fieldName,
+                    dataSource: dataSource,
+                    requestMappingTemplate: MappingTemplate.fromFile(resolver.requestMappingTemplate),
+                    responseMappingTemplate: MappingTemplate.fromFile(resolver.responseMappingTemplate),
                 })
-            }
+            });
+
+            // Loop the gsi resolvers
+            tableData[tableKey].GSIResolvers.forEach((resolverKey: any) => {
+                let resolver = resolvers['gsi'][resolverKey];
+                new Resolver(this.nestedAppsyncStack, `${resolver.typeName}-${resolver.fieldName}-resolver`, {
+                    api: this.appsyncAPI,
+                    typeName: resolver.typeName,
+                    fieldName: resolver.fieldName,
+                    dataSource: dataSource,
+                    requestMappingTemplate: MappingTemplate.fromFile(resolver.requestMappingTemplate),
+                    responseMappingTemplate: MappingTemplate.fromFile(resolver.responseMappingTemplate),
+                })
+            });
         });
 
         return tableNameMap;
@@ -306,35 +290,5 @@ export class AppSyncTransformer extends Construct {
             default:
                 return ProjectionType.ALL
         }
-    }
-
-    private getTableNameFromFieldName(fieldName: string) {
-        let tableName = ''
-        let plural = false
-        let replace = ''
-
-        if (fieldName.indexOf('list') > -1) {
-            replace = 'list'
-            plural = true
-        } else if (fieldName.indexOf('sync') > -1) {
-            replace = 'sync'
-            plural = true
-        } else if (fieldName.indexOf('get') > -1) {
-            replace = 'get'
-        } else if (fieldName.indexOf('delete') > -1) {
-            replace = 'delete'
-        } else if (fieldName.indexOf('create') > -1) {
-            replace = 'create'
-        } else if (fieldName.indexOf('update') > -1) {
-            replace = 'update'
-        }
-
-        tableName = fieldName.replace(replace, '')
-
-        if (plural) {
-            tableName = tableName.slice(0, -1)
-        }
-
-        return tableName + 'Table'
     }
 }

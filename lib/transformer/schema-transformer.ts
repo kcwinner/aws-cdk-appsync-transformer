@@ -144,8 +144,6 @@ export class SchemaTransformer {
                     } else if (templateType === 'res') {
                         this.resolvers['gsi'][mapName]['responseMappingTemplate'] = filepath
                     }
-
-
                 }
             })
         }
