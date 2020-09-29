@@ -120,7 +120,7 @@ Auth Role: Unsupported (for now?). Authorized roles (Lambda Functions, EC2 roles
 
 ### Functions
 
-Fields with the `@function` direction will be accessible via `api.outputs.FUNCTION_RESOLVERS`. It will return an array like below.Currently these are not named and do not specify a region. There are improvements that can be made here but this simple way has worked for me so I've implemented it first. Typically I send all `@function` requests to one Lambda Function and have it route as necessary.
+Fields with the `@function` directive will be accessible via `api.outputs.FUNCTION_RESOLVERS`. It will return an array like below.Currently these are not named and do not specify a region. There are improvements that can be made here but this simple way has worked for me so I've implemented it first. Typically I send all `@function` requests to one Lambda Function and have it route as necessary.
 
 ```js
 [
