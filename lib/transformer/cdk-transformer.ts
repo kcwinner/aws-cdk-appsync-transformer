@@ -1,9 +1,13 @@
 import { Transformer, TransformerContext, getFieldArguments } from "graphql-transformer-core";
 
+const graphqlTypeStatements = ['Query', 'Mutation', 'Subscription'];
+
 export class MyTransformer extends Transformer {
     tables: any
     noneDataSources: any
     functionResolvers: any[]
+    resolverTableMap: any
+    gsiResolverTableMap: any
 
     constructor() {
         super(
@@ -14,10 +18,26 @@ export class MyTransformer extends Transformer {
         this.tables = {}
         this.noneDataSources = {}
         this.functionResolvers = []
+        this.resolverTableMap = {};
+        this.gsiResolverTableMap = {};
     }
 
     public after = (ctx: TransformerContext): void => {
         this.printWithoutFilePath(ctx);
+
+        Object.keys(this.tables).forEach(tableName => {
+            let table = this.tables[tableName];
+            if (!table.Resolvers) table.Resolvers = [];
+            if (!table.GSIResolvers) table.GSIResolvers = [];
+
+            Object.keys(this.resolverTableMap).forEach(resolverName => {
+                if (this.resolverTableMap[resolverName] === tableName) table.Resolvers.push(resolverName);
+            })
+
+            Object.keys(this.gsiResolverTableMap).forEach(resolverName => {
+                if (this.gsiResolverTableMap[resolverName] === tableName) table.GSIResolvers.push(resolverName);
+            })
+        })
 
         ctx.setOutput('CDK_TABLES', this.tables);
         ctx.setOutput('NONE', this.noneDataSources);
@@ -60,6 +80,17 @@ export class MyTransformer extends Transformer {
                         typeName: typeName,
                         fieldName: fieldName
                     })
+                } else {
+                    let typeName = resource.Properties?.TypeName;
+                    let fieldName = resource.Properties?.FieldName;
+                    let tableName = resource.Properties?.DataSourceName?.payload[0];
+                    tableName = tableName.replace('DataSource', 'Table');
+
+                    if (graphqlTypeStatements.indexOf(typeName) >= 0) {
+                        this.resolverTableMap[fieldName] = tableName;
+                    } else { // this is a GSI
+                        this.gsiResolverTableMap[`${typeName}${fieldName}`] = tableName;
+                    }
                 }
             }
         }
@@ -99,7 +130,7 @@ export class MyTransformer extends Transformer {
         this.tables[resourceName] = table
     }
 
-    private parseKeySchema(keySchema: any, attributeDefinitions: any,) {
+    private parseKeySchema(keySchema: any, attributeDefinitions: any) {
         let partitionKey: any = {}
         let sortKey: any = {}
 

@@ -24,8 +24,6 @@ test('GraphQL API W/ Defaults Created', () => {
         authorizationConfig: apiKeyAuthorizationConfig
     });
 
-    console.log(stack);
-
     expect(stack).toHaveResource('AWS::CloudFormation::Stack');
     expect(appSyncTransformer.nestedAppsyncStack).toHaveResource('AWS::AppSync::GraphQLApi', {
         AuthenticationType: 'API_KEY'
