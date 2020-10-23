@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## 1.63.0-rc.2 (2020-09-30)
 
+### Changes
+
+* Pinning AWS CDK version to 1.63.0
+
+## 1.63.0-rc.2 (2020-09-30)
+
 ### Bugfixes
 
 * Fixed a bug with @key directive where it wouldn't properly create resolvers when the @key had a custom query field
