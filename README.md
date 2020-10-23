@@ -7,8 +7,8 @@
 
 [![npm version](https://badge.fury.io/js/aws-cdk-appsync-transformer.svg)](https://badge.fury.io/js/aws-cdk-appsync-transformer)
 [![PyPI version](https://badge.fury.io/py/aws-cdk-appsync-transformer.svg)](https://badge.fury.io/py/aws-cdk-appsync-transformer)
-[![NuGet version](https://badge.fury.io/nu/Kcwinner.AWSCDKAppSyncTransformer.svg)](https://badge.fury.io/nu/Kcwinner.AWSCDKAppSyncTransformer)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.kcwinner/AWSCDKAppSyncTransformer?color=brightgreen)](https://repo1.maven.org/maven2/io/github/kcwinner/AWSCDKAppSyncTransformer/)
+<!-- [![NuGet version](https://badge.fury.io/nu/Kcwinner.AWSCDKAppSyncTransformer.svg)](https://badge.fury.io/nu/Kcwinner.AWSCDKAppSyncTransformer)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.kcwinner/AWSCDKAppSyncTransformer?color=brightgreen)](https://repo1.maven.org/maven2/io/github/kcwinner/AWSCDKAppSyncTransformer/) -->
 
 ## Why This Package
 
@@ -144,7 +144,7 @@ I've written some helpers to generate code similarly to how AWS Amplify generate
 
 I will *attempt* to align the major and minor version of this package with [AWS CDK], but always check the release descriptions for compatibility.
 
-I currently support [![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/kcwinner/appsync-transformer-construct/@aws-cdk/core)](https://github.com/aws/aws-cdk)
+I currently support [![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/kcwinner/aws-cdk-appsync-transformer/@aws-cdk/core)](https://github.com/aws/aws-cdk)
 
 ## Limitations
 
