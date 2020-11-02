@@ -7,8 +7,10 @@
 
 [![npm version](https://badge.fury.io/js/aws-cdk-appsync-transformer.svg)](https://badge.fury.io/js/aws-cdk-appsync-transformer)
 [![PyPI version](https://badge.fury.io/py/aws-cdk-appsync-transformer.svg)](https://badge.fury.io/py/aws-cdk-appsync-transformer)
-<!-- [![NuGet version](https://badge.fury.io/nu/Kcwinner.AWSCDKAppSyncTransformer.svg)](https://badge.fury.io/nu/Kcwinner.AWSCDKAppSyncTransformer)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.kcwinner/AWSCDKAppSyncTransformer?color=brightgreen)](https://repo1.maven.org/maven2/io/github/kcwinner/AWSCDKAppSyncTransformer/) -->
+
+## THIS PACKAGE HAS BEEN ARCHIVED
+
+For CDK versions > 1.63.0 see [cdk-appsync-transformer](https://github.com/kcwinner/cdk-appsync-transformer). This follows the community accepted construct naming scheme and the project now uses [projen](https://github.com/eladb/projen).
 
 ## Why This Package
 
